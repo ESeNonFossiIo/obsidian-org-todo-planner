@@ -1,0 +1,481 @@
+.todo-planner-head {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+.todo-planner-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: var(--font-semibold);
+}
+.todo-planner-tools {
+  margin-top: -2px;
+}
+.todo-planner-spacer {
+  flex: 1;
+}
+.todo-planner-head button {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+.todo-planner-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  text-align: center;
+}
+.todo-planner-dow {
+  color: var(--text-muted);
+  font-size: var(--font-ui-smaller);
+}
+.todo-planner-day {
+  position: relative;
+  padding: 6px 0 10px;
+  border-radius: var(--radius-s);
+  cursor: pointer;
+}
+.todo-planner-day.is-empty {
+  cursor: default;
+}
+.todo-planner-day:not(.is-empty):hover {
+  background: var(--background-modifier-hover);
+}
+.todo-planner-day.is-today {
+  color: var(--text-accent);
+  font-weight: var(--font-bold);
+}
+.todo-planner-day.is-selected {
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+}
+.todo-planner-dot {
+  position: absolute;
+  left: 50%;
+  bottom: 3px;
+  width: 5px;
+  height: 5px;
+  margin-left: -2.5px;
+  border-radius: 50%;
+  background: var(--text-faint);
+}
+.todo-planner-day.has-open .todo-planner-dot {
+  background: var(--text-accent);
+}
+.todo-planner-day.has-overdue .todo-planner-dot {
+  background: var(--text-error);
+}
+.todo-planner-day.is-selected .todo-planner-dot {
+  background: var(--text-on-accent);
+}
+.todo-planner-list {
+  margin-top: 14px;
+}
+.todo-planner-list-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+.todo-planner-list-title {
+  font-weight: var(--font-semibold);
+}
+.todo-planner-section-name {
+  margin: 8px 0 2px;
+  color: var(--text-muted);
+  font-size: var(--font-ui-smaller);
+  text-transform: uppercase;
+}
+.todo-planner-section.is-overdue .todo-planner-section-name {
+  color: var(--text-error);
+}
+.todo-planner-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 3px 0;
+}
+.todo-planner-row input[type="checkbox"] {
+  flex: none;
+  align-self: center;
+}
+.todo-planner-text {
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
+}
+.todo-planner-text:hover {
+  text-decoration: underline;
+}
+.todo-planner-row.is-done .todo-planner-text {
+  color: var(--text-faint);
+  text-decoration: line-through;
+}
+.todo-planner-tag {
+  color: var(--text-accent);
+  font-size: var(--font-ui-smaller);
+}
+.todo-planner-chip {
+  flex: none;
+  padding: 0 6px;
+  height: auto;
+  box-shadow: none;
+  background: var(--background-modifier-hover);
+  color: var(--text-muted);
+  font-size: var(--font-ui-smaller);
+}
+.todo-planner-chip.is-overdue {
+  color: var(--text-error);
+}
+.todo-planner-empty,
+.todo-planner-undated summary {
+  margin: 8px 0;
+  color: var(--text-muted);
+  font-size: var(--font-ui-small);
+}
+.todo-planner-undated {
+  margin-top: 12px;
+}
+.todo-planner-weekday {
+  margin-bottom: 8px;
+  padding: 4px 8px;
+  border-left: 3px solid transparent;
+  border-radius: var(--radius-s);
+}
+.todo-planner-weekday.is-today {
+  border-left-color: var(--text-accent);
+}
+.todo-planner-weekday.is-selected {
+  background: var(--background-modifier-hover);
+}
+.todo-planner-weekday .todo-planner-list-title {
+  cursor: pointer;
+}
+.todo-planner {
+  container-type: inline-size;
+}
+@container (min-width: 640px) {
+  .todo-planner-weekgrid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 6px;
+    align-items: start;
+  }
+  .todo-planner-weekgrid .todo-planner-weekday {
+    margin-bottom: 0;
+    min-height: 140px;
+    border: 1px solid var(--background-modifier-border);
+    border-top: 3px solid transparent;
+  }
+  .todo-planner-weekgrid .todo-planner-weekday.is-today {
+    border-top-color: var(--text-accent);
+  }
+  .todo-planner-weekgrid .todo-planner-row {
+    flex-wrap: wrap;
+  }
+  .todo-planner-weekgrid .todo-planner-text {
+    flex-basis: calc(100% - 24px);
+    overflow-wrap: anywhere;
+  }
+}
+/* Touch: bigger targets on mobile (Obsidian adds .is-mobile to body) */
+.is-mobile .todo-planner-day {
+  padding: 10px 0 14px;
+}
+.is-mobile .todo-planner-row {
+  padding: 7px 0;
+  gap: 10px;
+}
+.is-mobile .todo-planner-row input[type="checkbox"] {
+  width: 22px;
+  height: 22px;
+}
+.is-mobile .todo-planner-chip {
+  padding: 4px 10px;
+  min-height: 30px;
+}
+.is-mobile .todo-planner-weekday .todo-planner-list-head button {
+  min-width: 36px;
+  min-height: 30px;
+}
+.todo-planner-eye {
+  display: flex;
+  align-items: center;
+}
+.todo-planner-eye svg {
+  width: 16px;
+  height: 16px;
+}
+.todo-planner-eye[aria-pressed="false"] {
+  color: var(--text-faint);
+}
+/* Tasks pane (Google Tasks style) */
+.todo-tasks-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+.todo-tasks-tab {
+  border-radius: 999px;
+  padding: 2px 12px;
+  height: auto;
+  box-shadow: none;
+}
+.todo-tasks-tab.is-active {
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+}
+.todo-tasks-add {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+.todo-tasks-add .todo-tasks-add-title {
+  flex: 1;
+  min-width: 0;
+}
+.todo-tasks-add input[type="date"] {
+  width: 10.5em;
+}
+.todo-tasks-task {
+  padding: 2px 0;
+}
+.todo-tasks-progress {
+  color: var(--text-muted);
+  font-size: var(--font-ui-smaller);
+}
+.todo-tasks-plus {
+  flex: none;
+  display: flex;
+  align-items: center;
+  padding: 0 4px;
+  height: auto;
+  box-shadow: none;
+  background: transparent;
+  color: var(--text-faint);
+}
+.todo-tasks-plus:hover {
+  color: var(--text-normal);
+}
+.todo-tasks-plus svg {
+  width: 14px;
+  height: 14px;
+}
+.todo-tasks-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 0 2px 26px;
+}
+.todo-tasks-item.is-done .todo-planner-text {
+  color: var(--text-faint);
+  text-decoration: line-through;
+}
+.todo-tasks-item .todo-tasks-sub-input {
+  flex: 1;
+  min-width: 0;
+}
+.todo-tasks-done {
+  margin-top: 14px;
+}
+.todo-tasks-done summary {
+  color: var(--text-muted);
+  font-size: var(--font-ui-small);
+  margin-bottom: 4px;
+}
+.is-mobile .todo-tasks-tab {
+  padding: 6px 14px;
+}
+.is-mobile .todo-tasks-item {
+  padding: 5px 0 5px 28px;
+}
+.is-mobile .todo-tasks-item input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+}
+.is-mobile .todo-tasks-plus {
+  padding: 4px 8px;
+}
+/* Several TODO files */
+.todo-planner-file {
+  flex: none;
+  cursor: pointer;
+  color: var(--text-faint);
+  font-size: var(--font-ui-smaller);
+}
+.todo-tasks-add {
+  flex-wrap: wrap;
+}
+.todo-tasks-add .todo-tasks-add-title {
+  flex: 1 1 8em;
+}
+.todo-tasks-file {
+  border-radius: var(--radius-s);
+}
+.todo-planner-tools select {
+  max-width: 9em;
+}
+.todo-tasks-add.has-file .todo-tasks-add-title {
+  flex-basis: 100%;
+}
+.todo-tasks-add.has-file button {
+  margin-left: auto;
+}
+.todo-tasks-new {
+  color: var(--text-accent);
+}
+/* Projected occurrences of repeating TODOs */
+.todo-planner-row.is-virtual .todo-planner-text {
+  color: var(--text-muted);
+  font-style: italic;
+}
+.todo-planner-row.is-virtual input[type="checkbox"] {
+  opacity: 0.45;
+}
+/* Tasks pane, week mode */
+.todo-tasks-weeknav {
+  align-items: center;
+  flex-wrap: nowrap;
+}
+.todo-tasks-weeknav .todo-planner-title {
+  flex: 1;
+}
+.todo-tasks-weeknav button {
+  padding: 2px 8px;
+}
+.todo-planner-weekday .todo-tasks-task {
+  padding: 0;
+}
+/* The ⋯ button of a row */
+.todo-planner-more {
+  flex: none;
+  display: flex;
+  align-items: center;
+  padding: 0 4px;
+  height: auto;
+  box-shadow: none;
+  background: transparent;
+  color: var(--text-faint);
+}
+.todo-planner-more:hover {
+  color: var(--text-normal);
+}
+.todo-planner-more svg {
+  width: 14px;
+  height: 14px;
+}
+.is-mobile .todo-planner-more {
+  padding: 4px 8px;
+}
+/* In the week grid the ⋯ button stays on the title line */
+@container (min-width: 640px) {
+  .todo-planner-weekgrid .todo-planner-text {
+    flex-basis: calc(100% - 52px);
+  }
+  .todo-planner-weekgrid .todo-planner-more {
+    order: 1;
+  }
+  .todo-planner-weekgrid .todo-planner-file,
+  .todo-planner-weekgrid .todo-planner-tag,
+  .todo-planner-weekgrid .todo-planner-chip {
+    order: 2;
+  }
+}
+.todo-tasks-danger {
+  color: var(--text-error);
+}
+/* The file-bound tasks view */
+.todo-tasks.is-file {
+  max-width: 760px;
+  margin: 0 auto;
+}
+.todo-tasks-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 8px 10px;
+  border-radius: var(--radius-s);
+  background: var(--background-modifier-hover);
+  color: var(--text-muted);
+  font-size: var(--font-ui-small);
+}
+.todo-tasks-banner span {
+  flex: 1 1 14em;
+}
+/* Dragging a task onto another one to make it a sub-item */
+.todo-tasks-task[draggable="true"] {
+  border-radius: var(--radius-s);
+}
+.todo-tasks-task.is-dragging {
+  opacity: 0.45;
+}
+.todo-tasks-task.is-drop-target {
+  outline: 2px dashed var(--interactive-accent);
+  outline-offset: 1px;
+  background: var(--background-modifier-hover);
+}
+/* Dragging a sub-item out to become a task */
+.todo-tasks-item.is-dragging {
+  opacity: 0.45;
+}
+.todo-tasks-tab.is-drop-target,
+.todo-planner-section.is-drop-target,
+.todo-planner-weekday.is-drop-target {
+  outline: 2px dashed var(--interactive-accent);
+  outline-offset: 1px;
+  background: var(--background-modifier-hover);
+}
+/* Dragging a task: a line shows where it will be placed */
+.todo-tasks-task.is-drop-before {
+  box-shadow: 0 -3px 0 0 var(--interactive-accent);
+}
+.todo-tasks-task.is-drop-after {
+  box-shadow: 0 3px 0 0 var(--interactive-accent);
+}
+/* Dragging a list: a bar shows where it will be placed */
+.todo-tasks-tab.is-dragging,
+.todo-planner-section-name.is-dragging {
+  opacity: 0.45;
+}
+/* a straight bar beside the pill-shaped tab (a box-shadow would bend with its corners) */
+.todo-tasks-tab.is-drop-before,
+.todo-tasks-tab.is-drop-after {
+  position: relative;
+}
+.todo-tasks-tab.is-drop-before::before,
+.todo-tasks-tab.is-drop-after::after {
+  content: "";
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--interactive-accent);
+}
+.todo-tasks-tab.is-drop-before::before {
+  left: -5px;
+}
+.todo-tasks-tab.is-drop-after::after {
+  right: -5px;
+}
+.todo-planner-section-name.is-drop-before {
+  box-shadow: 0 -3px 0 0 var(--interactive-accent);
+}
+.todo-planner-section-name.is-drop-after {
+  box-shadow: 0 3px 0 0 var(--interactive-accent);
+}
+.todo-tasks-tab svg {
+  width: 14px;
+  height: 14px;
+  vertical-align: middle;
+}
+.todo-planner-hidden {
+  display: none;
+}
