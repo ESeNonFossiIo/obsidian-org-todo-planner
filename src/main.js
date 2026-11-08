@@ -23,7 +23,7 @@
  *   modals.js    new-TODO, due-date and other dialogs
  *   settings.js  settings tab (defaults in settings-defaults.js)
  */
-import { Plugin, ItemView, Menu, Notice, Platform, TFile, normalizePath } from "obsidian";
+import { Plugin, ItemView, Menu, Notice, Platform, TFile, TFolder, normalizePath } from "obsidian";
 import { EditorView } from "@codemirror/view";
 import { parseTodos, listNames, addTodo, addList, toggleItem, addItem, setState, completeTodo, setDue, archiveDone, archivePath, moveTodo, deleteTodo, deleteItem, deleteList, renameTodo, renameList, isListName, orgPath, plannerSetting, addPlannerMarker, inTaskFolder, nestTodo, todoSubtree, promoteItem, reorderTodo, moveTodoToList, siblingTodo, reorderList, fileLabel, dayKey } from "./core.js";
 import { PlannerView, PLANNER_VIEW } from "./planner.js";
@@ -116,8 +116,11 @@ export default class TodoPlannerPlugin extends Plugin {
     this.app.workspace.onLayoutReady(() => {
       this.sweepSoon();   // tabs that were already open when the plugin loaded
       // the folders' contents change with the vault; not listened to during start-up, when every file "is created"
-      const changed = (file) => {
-        if (!/\.org$/i.test(file.path)) return;
+      const changed = (file, oldPath) => {
+        // only files that are, or were, TODO files matter; other vault events are ignored
+        const folders = this.settings.taskFolders || [];
+        const relevant = (path) => !!path && /\.org$/i.test(path) && (inTaskFolder(path, folders) || this.isTodoFile(path));
+        if (!relevant(file.path) && !relevant(oldPath)) return;
         this.invalidateFiles();
         clearTimeout(this.refreshTimer);
         this.refreshTimer = setTimeout(() => this.refreshViews(), 150);
@@ -175,13 +178,36 @@ export default class TodoPlannerPlugin extends Plugin {
     if (this._files && this._filesKey === key) return this._files;
     const configured = [...new Set((this.settings.files || []).map((f) => normalizePath(f)).filter(Boolean))];
     const folders = this.settings.taskFolders || [];
-    const found = folders.some((f) => f.trim())
-      ? this.app.vault.getFiles().filter((f) => inTaskFolder(f.path, folders)).map((f) => f.path).sort()
-      : [];
+    const found = this.filesInTaskFolders(folders);
     const all = [...new Set([...configured, ...found])];
     this._files = all.length ? all : DEFAULTS.files.slice();
     this._filesKey = key;
     return this._files;
+  }
+
+  /**
+   * The `.org` files (archives excepted) below the task folders. Only those folders are walked, from
+   * the folder object down: the rest of the vault is never listed. An empty entry, or `/` (the whole
+   * vault), is ignored.
+   * @param {string[]} folders vault folders from the settings
+   * @returns {string[]} their paths, sorted
+   */
+  filesInTaskFolders(folders) {
+    const found = [];
+    for (const raw of folders) {
+      const dir = raw.trim().replace(/\\/g, "/").replace(/^\/+|\/+$/g, "");   // same cleaning as inTaskFolder
+      if (!dir || dir === ".") continue;
+      const root = this.app.vault.getAbstractFileByPath(normalizePath(dir));
+      if (!(root instanceof TFolder)) continue;
+      const walk = (folder) => {
+        for (const child of folder.children) {
+          if (child instanceof TFolder) walk(child);
+          else if (inTaskFolder(child.path, [dir])) found.push(child.path);
+        }
+      };
+      walk(root);
+    }
+    return [...new Set(found)].sort();
   }
 
   /**

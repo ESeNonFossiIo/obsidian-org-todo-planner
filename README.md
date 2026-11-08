@@ -432,7 +432,8 @@ Remember to install and enable Org Reader on the phone too.
   `<vault>/.obsidian/plugins/org-todo-planner/` and enable the plugin in Settings → Community plugins.
 
 The plugin makes no network requests. It reads and writes only the `.org` files you configure (and their
-`-archive.org` files), and keeps its settings in `data.json` inside its plugin folder.
+`-archive.org` files), and keeps its settings in `data.json` inside its plugin folder. It never lists your
+vault: if you set *Task folders* it looks inside those folders only, and nothing otherwise.
 
 ## License
 

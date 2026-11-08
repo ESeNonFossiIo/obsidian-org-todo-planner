@@ -9,7 +9,9 @@ go. Target repo: `ESeNonFossiIo/obsidian-org-todo-planner` (default branch `mast
       settings, Mobile and Install sections
 - [x] `manifest.json` complete (`id`, `name`, `version`, `minAppVersion`, `description`, `author`,
       `authorUrl`, `isDesktopOnly: false`); the description is under 250 characters
-- [x] No Node or Electron APIs, no network requests, no `innerHTML`, no debug logging, no inline styles
+- [x] No Node or Electron APIs, no network requests, no `innerHTML`, no debug logging, no inline styles,
+      and no vault-wide listing (`getFiles`, `getMarkdownFiles`, `getAllLoadedFiles`): *Task folders* are
+      walked from the folder object down, only the folders you configure
 - [x] No personal data in the repo: no vault files, `data.json` and `.deploy-target` are gitignored, the
       screenshots use made-up sample data
 - [x] Unit tests (`npm test`), build (`npm run build`) and three workflows: `ci.yml` (tests + build on every
@@ -102,6 +104,10 @@ version, with no `v`** (currently `0.1.0`); the release workflow fails otherwise
        - *Writes to files?* Only the `.org` files you configure (and their `-archive.org`), through
          `vault.process`, or through Org Reader's editor when the file is open there.
        - *Network, telemetry, desktop-only APIs?* None.
+       - *Vault enumeration?* None. The plugin only opens the files you list, and for *Task folders* it
+         walks the children of those folders (`getAbstractFileByPath` + `TFolder.children`). The vault
+         root, and every folder you did not configure, is never listed; vault events are ignored unless
+         the file is, or was, a TODO file.
 5. [ ] Answer review comments by pushing changes and tagging a new release (see below)
 
 ## 6. After approval: releasing updates
