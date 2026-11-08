@@ -1,7 +1,7 @@
 {
   "id": "org-todo-planner",
   "name": "Org Todo Planner",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "minAppVersion": "1.4.0",
   "description": "Manage TODOs in Org files: calendar and week view, due dates, repeating tasks, lists and sub-items, with drag and drop. Requires the Org Reader plugin.",
   "author": "ESeNonFossiIo",
